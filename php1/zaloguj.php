@@ -13,23 +13,29 @@
 		$login = $_POST['login'];
 		$haslo = $_POST['haslo'];
 		
-		$hasloc = password_hash($haslo.$login, PASSWORD_DEFAULT);
+	
 		
 		
-		$sql = "SELECT * FROM users WHERE login='$login' AND haslo='$hasloc'";
+		$sql = "SELECT haslo FROM users WHERE login='$login'";
 		
-		if($rezultat = @$polaczenie->query($sql)){
+		$rezultat = @$polaczenie->query($sql);
+			$row = $rezultat -> fetch_assoc();
+				
+				
+					$text = $row['haslo'];  
 			
+				
+				
 			$ile_userow = $rezultat->num_rows;
-			if($ile_userow>0){
+			if($ile_userow>0 &&  password_verify($haslo.$login, $text)){
 				
 				header('Location: formularz.php?login='.$login);
 				
 			}else{
-				echo $hasloc." ".$haslo.$login;
+				echo " ".$text;
 			}
 			
-		}
+		
 		
 		
 		
